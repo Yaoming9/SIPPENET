@@ -15,23 +15,39 @@ body{
 	width: auto;
 	text-align: center;
 }
+#block-system-main-menu h2{
+	display: none;
+}
 #logo{
 	width: 64px;
 	height: 55px;
 	vertical-align: middle;
 	padding-right: 10%;
 	padding-bottom: 18px;
+	position: absolute;
 }
-#main_menu{
+#logo_mobile{
+	margin: 0;
+	padding: 0;
+	padding-bottom: 18px;
+	width: 64px;
+	height: 55px;
+	vertical-align: middle;
+	display: none;
+}
+.menu{
 	list-style-type: none;
-	margin-left: 25%;
 	font-size: 0;
+	position: absolute;
+	right: 0;
+	margin-top: 18px;
+	background-color: transparent;
 }
-.menu-item{
+.menu > li{
 	display: inline;
 	border-right: 1px solid #446CB3;
 	padding: 8px 27px;
-	margin: 0;
+	margin: 0 !important;
 	font-size: 16px;
 	margin-top: 18px;
 	position: relative;
@@ -45,33 +61,27 @@ body{
 	text-align: left;
 	border: 1px solid black;
 	left: 0;
-	top: 37px;
+	top: 35px;
 	background-color: white;
 	padding: 0;
-	min-width: 150px;
+	min-width: 200px;
 	width: auto;
+	font-size: 0;
+	border-top: 3px solid #446CB3;
 }
-.submenu-item{
+.submenu > li{
 	border-bottom: 1px solid grey;
 	padding: 5px;
+	font-size: 16px;
+	margin: 0 !important;
 }
-
 #main_menu_mobile{
 	display: none;
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
 }
-#logo_mobile{
-	margin: 0;
-	padding: 0;
-	padding-bottom: 18px;
-	width: 64px;
-	height: 55px;
-	vertical-align: middle;
-	display: none;
-}
-.menu-item a, .menu-item a:visited, .submenu-item a, .submenu-item a:visited{
+.submenu-item a, .submenu-item a:visited, .menu li a, .menu li a:visited {
 	text-decoration: none;
 	color: black;
 	margin: 0;
@@ -79,29 +89,26 @@ body{
 	display: inline-block;
 }
 
-.submenu-item:hover a{
+.submenu-item:hover a, .submenu li:hover a{
 	color: #446CB3;
 }
 
 @media screen and (max-width: 1500px) {
-	#main_menu, #header, #wrapper{
+	#header, #wrapper{
 		margin: 0;
 		padding: 0;
 	}
 }
-@media screen and (max-width: 870px) {
-    #logo{
+@media screen and (max-width: 1220px) {
+	#logo{
+		left: 0;
 		padding: 0;
-		margin: 0;
-	}
-	.menu-item{
-		padding: 4px 13px;
 	}
 }
-@media screen and (max-width: 620px) {
-	#main_menu{
+@media screen and (max-width: 625px) {
+	.menu{
 		display: none;
-	}
+	}	
 	#main_menu_mobile{
 		display: inline-block;
 	}
@@ -120,13 +127,6 @@ body{
 		position: relative;
 	}
 	#hamburger-menu:hover{
-		-webkit-transition: transform .5s; /* Safari */
-		transition: transform .5s;
-		-ms-transform: rotate(90deg); /* IE 9 */
-		-webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
-		transform: rotate(90deg);
 		cursor: pointer;
 	}
 }
-
-

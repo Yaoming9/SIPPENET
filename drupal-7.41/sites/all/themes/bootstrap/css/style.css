@@ -1,0 +1,9 @@
+.navbar-collapse{
+	background-color: white;
+}
+td:nth-child(1){
+	background-color: #5FD3FA;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+}

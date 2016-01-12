@@ -1,0 +1,186 @@
+body{
+	margin: 0;
+	font-family: Calibri;
+	background-color: white;
+}
+#wrapper{
+	margin-left: 10%;
+	margin-right: 10%;
+	background-color: #DAE1E8;
+}
+#header{
+	border: 1px dotted black;
+	background-color: white;
+	height: auto;
+	width: auto;
+	text-align: center;
+}
+#logo{
+	width: 50px;
+	height: 35px;
+	vertical-align: middle;
+	padding-right: 5%;
+}
+#title{
+	color: #446CB3;
+	font-size: 48px;
+	text-decoration: none;
+	display: inline-block;
+	margin-top: 100px;
+}
+#search-block-form{
+	position: absolute;
+	right: 0;
+	top: 170px;
+}
+.submitted{
+	display: none;
+}
+.menu{
+	list-style-type:none;
+	border: 1px solid black;
+	height: 50px;
+	padding: 0;
+	margin: 0;
+	padding-bottom: 20px;
+}
+.menu li, .menu .leaf {
+	display: inline;
+	padding: 0;
+	margin: 0;
+}
+.menu > li > a{
+	padding: 8px 27px;
+	font-size: 18px;
+	font-family: Verdana;
+	text-decoration: none;
+}
+.menu > li > a:hover, .menu > li .active{
+	border-bottom: 3px solid #446CB3;
+}
+#block-system-main-menu  > h2{
+	visibility: hidden;
+}
+p{
+	text-indent: 50px;
+	font-family: Calibri;
+	font-size: 18px;
+	padding-left: 5%;
+	padding-right: 5%;
+}
+#comments .title{
+	border-bottom: 3px solid #446CB3;
+	font-weight: normal;
+}
+#comments{
+	background-color:white;
+	border: 1px solid #DAE1E8;
+}
+.username{
+	border-bottom: 3px solid #446CB3;
+	text-decoration: none;
+	color: black;
+	margin-left: 2%;
+}
+#comment-form{
+	padding-left: 5%;
+	padding-right: 5%;
+}
+#footer{
+	background-color: black;
+	height: 200px;
+}
+.footer-ul{
+	list-style-type: none;
+	display: block;
+}
+.footer-a{
+	color: white;
+	text-decoration: none;
+}
+.footer-a:hover{
+	border-bottom: 3px solid #446CB3;
+}
+.footer-categ{
+	position: absolute;
+	padding-top: 20px;
+	padding-bottom: 15px;
+	min-width: 181px;
+	width: auto;
+}
+#liens-container{
+	padding-left: 30px;
+	z-index: 50;
+}
+#partenaires-container{
+	padding-left: 211px;
+	z-index: 40;
+}
+#pays-container{
+	padding-left: 392px;
+	z-index: 10;
+}
+.title-category-footer{
+	color: white;
+	display: block;
+	font-size: 24px;
+}
+.title-category-footer{
+	border-bottom: 3px solid #446CB3;
+}
+#main_menu{
+	list-style-type: none;
+	margin-left: 50%;
+}
+.menu-item{
+	display: inline;
+	border-right: 1px solid #446CB3;
+	padding: 8px 27px;
+}
+#main_menu_mobile{
+	display: none;
+	padding: 0;
+	margin: 0;
+}
+
+@media screen and (max-width: 1200px) {
+    #main_menu{
+		margin-left: 0%;
+	}
+}
+@media screen and (max-width: 600px) {
+    #main_menu{
+		margin-left: 0%;
+	}
+	.menu-item{
+		padding: 4px 13px;
+	}
+}
+@media screen and (max-width: 480px) {
+    #main_menu{
+		padding: 0;
+		margin: 0;
+	}
+	.menu-item{
+		padding: 4px 13px;
+		display: inline-block;
+	}
+	#logo{
+		padding: 0;
+		margin: 0;
+	}
+}
+@media screen and (max-width: 410px) {
+	#header, #wrapper{
+		margin: 0;
+		padding: 0;
+	}
+	#main_menu{
+		display: none;
+	}
+	#main_menu_mobile{
+		display: inline;
+	}
+}
+
+

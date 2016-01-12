@@ -1,0 +1,28 @@
+name = SIPPENET
+description = Responsive template créé pour SIPPENET
+core = 7.x
+screenshot = screenshot.png
+engine = phptemplate
+
+
+;Les feuilles de style
+
+stylesheets[all][] = style.css
+stylesheets[all][] = boostrap3/css/bootstrap3.css
+stylesheets[print][] = print.css
+
+;Les scripts
+scripts[] = js/jquery.js
+scripts[] = js/jquery-ui.js
+scripts[] = js/main.js
+
+
+;Les régions
+
+regions[header] = Header
+regions[highlighted] = Highlighted
+regions[help] = Help
+regions[content] = Content
+regions[sidebar_first] = Left sidebar
+regions[sidebar_second] = Right sidebar
+regions[footer] = Footer

@@ -23,33 +23,23 @@
 		<!--******************************************** -->
       </div>
 		
-		<?php print render($page['content']); ?>
+		<?php 
+			if ($is_front || strstr($_GET['q'], 'admin/block')) : ?>
+				<div id="container_actualites" class="actualites">
+				  <?php print render($page['actualites']); ?>
+				</div>
+				
+				<div id="container_partenaires" class="partenaires">
+				  <?php print render($page['partenaires']); ?>
+				</div>
+			<?php 
+			else :
+			 print render($page['content']); ?>
+		<?php 
+			endif; 
+		?>
 		
 		<div id="footer">
-			<!--<div class="footer-categ" id="liens-container">
-				<span class="title-category-footer">Suivez-nous</span>
-				<ul class="footer-ul" id="liens">
-					<li><a class="footer-a" href="#">Facebook</a></li>
-					<li><a class="footer-a" href="#">Twitter</a></li>
-					<li><a class="footer-a" href="#">Google +</a></li>
-					<li><a class="footer-a" href="#">YouTube</a></li>
-				</ul>
-			</div>
-			<div class="footer-categ" id="partenaires-container">
-				<span class="title-category-footer">Nos Partenaires</span>
-				<ul class="footer-ul" id="partenaires">
-					<li><a class="footer-a" href="#">Entreprise 1</a></li>
-					<li><a class="footer-a" href="#">Entreprise 2</a></li>
-				</ul>
-			</div>
-			<div class="footer-categ" id="pays-container">
-				<span class="title-category-footer">Présence mondiale</span>
-				<ul class="footer-ul" id="pays">
-					<li><a class="footer-a" href="#">France</a></li>
-					<li><a class="footer-a" href="#">Espagne</a></li>
-					<li><a class="footer-a" href="#">Royaume-Uni</a></li>
-				</ul>
-			</div>-->
 		</div>
     </div>
 	

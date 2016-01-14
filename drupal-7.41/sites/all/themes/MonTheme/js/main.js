@@ -37,4 +37,6 @@ jQuery(document).ready(function($) {
 			$('#hamburger-menu').css('transform', 'rotate(0deg)');
 			$(this).children('.submenu').stop(true, false).slideUp();
 	});
+	
+	$('td').children('img, a').after('</br></br>');
 });

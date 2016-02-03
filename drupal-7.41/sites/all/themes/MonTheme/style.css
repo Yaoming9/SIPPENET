@@ -13,7 +13,7 @@ body{
 	background-color: white;
 	height: 70px;
 	width: auto;
-	text-align: center;
+	text-align: left;
 }
 #block-system-main-menu h2{
 	display: none;
@@ -39,7 +39,7 @@ body{
 	list-style-type: none;
 	font-size: 0;
 	position: absolute;
-	right: 0;
+	left: 100px;
 	margin-top: 18px;
 	background-color: transparent;
 	z-index: 100;
@@ -106,16 +106,43 @@ body{
 }
 
 
+tr{
+	height: 73px;
+}
 
+.break_elem{
+	visibility: hidden;
+}
+.user-picture{
+	position: absolute;
+}
+.profile > .field {
+	margin-left: 450px;
+}
+.profile > div > .field-label{
+	color: #446CB3;
+	font-size: 20px;
+	font-family: Verdana, serif;
+	padding-bottom: 5px;
+}
+.profile > div > .field-items{
+	color: #FD8947;
+	padding-bottom: 20px;
+	font-size: 18px;
+}
+.profile{
+	height: 500px;
+}
 
-
-
-
-
-
-
-
-
+#block-system-user-menu{
+	margin-left: 1100px;
+}
+#block-system-user-menu > h2{
+	display: none;
+}
+#block-system-user-menu > div > ul > li{
+	display: inline;
+}
 @media screen and (max-width: 1500px) {
 	#header, #wrapper{
 		margin: 0;

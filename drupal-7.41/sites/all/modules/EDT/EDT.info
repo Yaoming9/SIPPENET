@@ -1,0 +1,3 @@
+name = Emploi du Temps
+description = Génère un emploi du temps à partir de la base de données Drupal.
+core = 7.x

@@ -121,41 +121,6 @@
       <p class="lead"><?php print $site_slogan; ?></p>
     <?php endif; ?>
     <?php print render($page['header']); ?>
-	
-    <div id="carousel-header" class="carousel slide" data-ride="carousel">
-		<div class="bullets-control">
-		  <ol class="carousel-indicators">
-			  <li data-target="#carousel-bootstrap" data-slide-to="0" class="bullet active"></li>
-			  <li data-target="#carousel-bootstrap" data-slide-to="1" class="bullet"></li>
-			  <li data-target="#carousel-bootstrap" data-slide-to="2" class="bullet"></li>
-		   </ol>
-		</div>
-		  
-		<div class="carousel-inner" role="listbox">
-		
-			<div class="item active">
-				<img src="http://localhost/drupal-7.41/sites/default/files/carousel_images/paysage.jpg" alt="Joli paysage">
-				<div class="carousel-caption">Merveilleux paysage...</div>
-			</div>
-
-			 <div class="item">
-				<img src="http://localhost/drupal-7.41/sites/default/files/carousel_images/Rocks%20and%20sand%20par%20Mabut.jpg" alt="Désert">
-				<div class="carousel-caption">Joli désert...</div>
-			</div>
-
-			<div class="item">
-				<div class="video-wrapper">
-					<div class="video-container">
-						<iframe src="https://www.youtube.com/embed/https://www.youtube.com/watch?v=rLln2r1O-X8?wmode=opaque&amp;enablejsapi=1&amp;origin=http%3A%2F%2Flocalhost" title="YouTube video player" allowfullscreen="1" class="ytplayer" id="ytplayer-https://www.youtube.com/watch?v=rLln2r1O-X8" data-videoid="https://www.youtube.com/watch?v=rLln2r1O-X8" frameborder="0" height="315" width="560"></iframe>
-					</div>
-				</div>
-				<div class="carousel-caption">Et pour tout bien tester...</div>
-			</div>
-
-		</div><!-- .carousel-inner -->
-			<a class="carousel-control left" href="#carousel-bootstrap" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-			<a class="carousel-control right" href="#carousel-bootstrap" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-	</div>
   </header> <!-- /#page-header -->
 
   <div class="row">

@@ -1,0 +1,418 @@
+<?php
+	/**
+	 * Implements hook_menu().
+	 */
+	function EDT_menu() {
+	  $items = array();
+	  $items['content/emploi_du_temps'] = array(
+		'title' => 'Emploi du temps',
+		'access callback' => TRUE,
+		'page arguments' => array(1, 'firstDate'),
+		'page callback' => 'afficher_edt',
+	  );
+	  return $items;
+	}
+		 		 
+	/**
+	 * Callback for @see mon_module_menu().
+	 */
+	function afficher_edt() {
+	  $dates = initDates();
+	  $edt = creer_edt($dates);
+	  $myForm = drupal_get_form('EDT_form');
+	  
+	  $prev_week = date('Y-m-d', strtotime($dates[1] .' -7 days'));
+	  $next_week = date('Y-m-d', strtotime($dates[1] .' +7 days'));
+	  return $edt.'<br><a href="'.$prev_week.'" id="switch_prec">Semaine précédente</a><a href="'.$next_week.'" id="switch_next">Semaine suivante</a></br>'.drupal_render($myForm); 
+	}	
+	
+	function initDates(){
+		if(arg(2) == 1)
+			$date = date('Y-m-d');
+		else
+		{
+			$dte = explode('-', arg(2));
+			if ($dte[0] < 2002 || $dte[0] > 2030)
+				$date = date('Y-m-d');
+			else if ($dte[1] < 01 || $dte[1] > 12)
+				$date = date('Y-m-d');
+			else if ($dte[2] < 01 || $dte[2] > 31)
+				$date = date('Y-m-d');
+			else
+				$date = arg(2);
+		}
+		
+		$tmp = explode('-', $date);   //tmp[0] = année, tmp[1] = mois, tmp[2] = jour
+		$jour = date("l", mktime(0, 0, 0, $tmp[1], $tmp[2], $tmp[0]));
+		if ($jour == 'Monday')
+			$date = date('Y-m-d', strtotime($date));
+		if ($jour == 'Tuesday')
+			$date = date('Y-m-d', strtotime($date .' -1 day'));
+		if ($jour == 'Wednesday')
+			$date = date('Y-m-d', strtotime($date .' -2 days'));
+		if ($jour == 'Thursday')
+			$date = date('Y-m-d', strtotime($date .' -3 days'));
+		if ($jour == 'Friday')
+			$date = date('Y-m-d', strtotime($date .' -4 days'));
+		if ($jour == 'Saturday')
+			$date = date('Y-m-d', strtotime($date .' -5 days'));
+		if ($jour == 'Sunday')
+			$date = date('Y-m-d', strtotime($date .' -6 days'));
+			
+		
+		$sem = array();
+		$sem[0] = '';
+		
+		for ($i = 1; $i <= 7; $i ++){
+			$sem[$i] = $date;
+			$date = date('Y-m-d', strtotime($date .' +1 day'));
+		}
+		
+		return $sem;
+	}
+	
+	function creer_edt($date) {
+		$rows = array();
+		$semaine = array('', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
+		
+		//header du tableau
+		$header = array();
+		for ($i = 0; $i <= 7; $i++) {
+		  if ($i != 0){
+			  $temp_date = explode('-', $date[$i] );
+			  
+			  if ($temp_date[1] == "01")
+				  $mois = 'Janvier';
+			  if ($temp_date[1] == "02")
+				  $mois = 'Février';
+			  if ($temp_date[1] == "03")
+				  $mois = 'Mars';
+			  if ($temp_date[1] == "04")
+				  $mois = 'Avril';
+			  if ($temp_date[1] == "05")
+				  $mois = 'Mai';
+			  if ($temp_date[1] == "06")
+				  $mois = 'Juin';
+			  if ($temp_date[1] == "07")
+				  $mois = 'Juillet';
+			  if ($temp_date[1] == "08")
+				  $mois = 'Août';
+			  if ($temp_date[1] == "09")
+				  $mois = 'Septembre';
+			  if ($temp_date[1] == "10")
+				  $mois = 'Octobre';
+			  if ($temp_date[1] == "11")
+				  $mois = 'Novembre';
+			  if ($temp_date[1] == "12")
+				  $mois = 'Décembre';
+			  
+			  $header[] = array('data' =>  $semaine[$i].'</br>'.$temp_date[2].' '.$mois.' '.$temp_date[0], 'class' => 'header_edt');
+		  }
+		  else
+			  $header[] = array('data' =>  '', 'class' => 'header_edt');
+		}
+		
+		$k = 8;   //pour afficher les heures
+		$z = 0;     
+		$init = 1;	
+			
+		$results = db_query("SELECT distinct designation FROM cours");
+		$couleurs = array();
+		while ($record = $results->fetchAssoc())
+		{		
+			$query_coul = db_query("SELECT code FROM couleur WHERE label_cours = '".$record['designation']."'");     //récupération de la couleur
+			$coul = $query_coul->fetchAssoc();
+			if (!strpos($coul['code'], '#') && !is_null($coul['code']))
+				$couleurs[$record['designation']] = '#'.$coul['code'];
+			else
+				$couleurs[$record['designation']] = $coul['code'];
+		}
+		
+		for ($i = 1; $i <= 11; $i++) 
+		{			
+			for ($p = 0; $p <= 7; $p++)
+			{
+				if (isset(${"tab" . $i}[$p]) && ${"tab" . $i}[$p] != '')
+					$init = 0;
+			}
+			if ($init != 0)
+			{
+				${'cell_content' .$i} = array('','','','','','','','');
+				${"tab" . $i} = array('','','','','','','','');    //un tableau par ligne
+			}
+			
+			$borne = date('Y-m-d', strtotime($date[1] .' +6 days'));
+			$results = db_query("SELECT * FROM cours WHERE date_debut > '".$date[1]."' AND date_debut < '".$borne."'");
+			
+			while ($record = $results->fetchAssoc())
+			{			
+				$tmp = explode("-", $record['date_debut']);    //date de début      tmp[0] = année    tmp[1] = mois    tmp[2] = jour + heure
+				$tmp2 = explode(" ", $tmp[2]);     //séparation jour et heure       tmp2[0] = jour   tmp2[1] = heure   
+				$tmp3 = explode(":", $tmp2[1]);   //heure de début                  tmp3[0] = heure   tmp3[1] = min    tmp3[2] = seconde
+				
+				$annee_deb = $tmp[0];
+				$mois_deb = $tmp[1];
+				$jour_deb = $tmp2[0];
+				
+				$heure_deb = $tmp3[0];
+				$min_deb = $tmp3[1];
+				$sec_deb = $tmp3[0];			
+				
+				$jour = date("l", mktime(0, 0, 0, $mois_deb, $jour_deb, $annee_deb));    //récupération du jour
+				
+				if ($jour == 'Monday')
+					$ind = 1;
+				if ($jour == 'Tuesday')
+					$ind = 2;
+				if ($jour == 'Wednesday')
+					$ind = 3;
+				if ($jour == 'Thursday')
+					$ind = 4;
+				if ($jour == 'Friday')
+					$ind = 5;
+				if ($jour == 'Saturday')
+					$ind = 6;
+				if ($jour == 'Sunday')
+					$ind = 7;				
+							
+				$tmp = explode("-", $record['date_fin']);    
+				$tmp2 = explode(" ", $tmp[2]);
+				$tmp3 = explode(":", $tmp2[1]);   
+				
+				$annee_fin = $tmp[0];
+				$mois_fin = $tmp[1];
+				$jour_fin = $tmp2[0];
+				
+				$heure_fin = $tmp3[0];
+				$min_fin = $tmp3[1];
+				$sec_fin = $tmp3[0];
+				
+				$duree = $heure_fin - $heure_deb;         //récupération de la durée du cours
+				
+				if($k == $heure_deb)
+				{
+					
+					//mise à jour du tableau de la ligne actuelle
+					$z = $i;
+					$y = 0;
+					while ($y < $duree)
+					{
+						${"tab" . $z}[$ind] = '<b>'.$record['designation'].'</b></br>'.$record['enseignant'];
+						${'cell_content' .$z}[$ind] = $record['designation'];
+						$z ++;
+						$y ++;						
+					}
+				}							
+			}
+			for ($j = 0; $j <= 7; $j++)
+			{
+				${"tab" . $i}[0] = $k.':00';
+				if ($k == 12 || $k == 13)
+				{
+					$temp = array('','','','','','','','');
+					$temp[0] = $k.':00';
+					$color = '';
+					for ($p = 0; $p <= 7; $p++)
+					{
+						if ($p != 0)
+							$color = '#446BC3';
+						
+						${"ligne" . $i}[] = array('data' => $temp[$p], 'bgcolor' => $color);
+						
+					}
+					break;
+				}
+				if (isset(${"tab".$i}[$j]))
+				{
+					if(${"tab".$i}[$j] != '' && !strpos(${"tab".$i}[$j], ':00'))
+					{
+						if (is_null($couleurs[${"cell_content".$i}[$j]]) || strlen($couleurs[${"cell_content".$i}[$j]]) < 6)
+							${"ligne" . $i}[] = array('data' => ${"tab".$i}[$j]);
+						else
+							${"ligne" . $i}[] = array('data' => ${"tab".$i}[$j], 'bgcolor' => $couleurs[${"cell_content".$i}[$j]]);
+					}
+					else
+						${"ligne" . $i}[] = array('data' => ${"tab".$i}[$j]);
+				}
+				else
+					${"ligne" . $i}[] = array('data' => '');
+			}
+			$k ++;
+		}		
+		
+		//ajout des lignes au tableau
+		for ($i = 1; $i <= 11; $i++) 
+		{
+			$rows[$i] = array('data' => ${'ligne' . $i});
+		}		
+			
+		$attributes = array('border'=> 1, 'cellpadding' => 15, 'width' => '100%');
+		
+		$data = array(
+			'header' => $header,
+			'rows' => $rows,
+			'attributes' => $attributes
+		);
+		$output = theme('table', $data);
+		return $output;
+	}
+	
+	
+	function EDT_form($form, &$form_state) {
+	  
+	  $form['designation_cours'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Saisissez le nom du cours'),
+		'#required' => TRUE,
+	  );
+	  
+	  $form['enseignant_cours'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Saisissez le nom de l\'enseignant affecté au cours'),
+		'#required' => TRUE,
+	  );
+	  
+	  $date = date('Y-m-d');
+	  
+	  $form['date_cours'] = array(
+		'#title' => 'Saisissez la date à laquelle aura lieu le cours',
+		'#type' => 'date_text',
+		'#date_format' => 'Y-m-d',
+		'#default_value' => date('Y-m-d'),
+		'#required' => TRUE,
+	  );
+	  
+	  $form['heure_debut_cours'] = array(
+		'#title' => t('Saisissez l\'heure du début du cours'),
+		'#type' => 'textfield',
+		'#size' => '2',
+		'#maxlength' => '2',
+		'#required' => TRUE,
+	  );
+	  
+	  $form['heure_fin_cours'] = array(
+		'#title' => t('Saisissez l\'heure de fin du cours'),
+		'#type' => 'textfield',
+		'#size' => '2',
+		'#maxlength' => '2',
+		'#required' => TRUE,
+	  );
+	  
+	  $form['couleur'] = array(
+		'#title' => t('Saisissez une couleur pour le cours'),
+		'#description' => t('Code hexadécimal de la couleur, avec ou sans le \'#\'. Cette couleur s\'appliquera à tous les cours ayant le même nom.'),
+		'#type' => 'textfield',
+		'#size' => '6',
+		'#maxlength' => '7',
+		'#required' => FALSE,
+	  );
+	  
+	  $form['submit_button'] = array(
+		'#type' => 'submit',
+		'#value' => t('Valider le nouveau cours'),
+	  );
+	  
+	  return $form;
+	}
+	
+	/**
+	 * Implements hook_form_alter().
+	 */
+	function EDT_form_alter(&$form, &$form_state, $form_id) {	  
+	  // Utilisateur connecté
+	  global $user;
+	  // Le formulaire ciblé
+	  if ($form_id == 'EDT_form') {
+		$user_access = 0;  //par défaut l'utilisateur n'a pas accès au formulaire
+		// Les rôles qui peuvent y accéder   
+		$roles_accepted = array(3);
+		
+		foreach($user->roles as $k => $v)    //$k = id_role,   $v = nom du rôle
+		{
+			//dès qu'un des rôles de l'utilisateur fait partie des rôles acceptés, on sort de la boucle,pas besoin de masquer le formulaire
+			if (in_array($k, $roles_accepted))   
+			{
+				$user_access = 1;
+				break;
+			}
+		}
+		//si l'utilisateur n'a pas accès au formulaire, on masque les champs du formulaire
+		if ($user_access ==  0) {
+		  // Empêcher l'accès
+		  $form['designation_cours']['#access'] = FALSE;
+		  $form['enseignant_cours']['#access'] = FALSE;
+		  $form['date_cours']['#access'] = FALSE;
+		  $form['heure_debut_cours']['#access'] = FALSE;
+		  $form['heure_fin_cours']['#access'] = FALSE;
+		  $form['couleur']['#access'] = FALSE;
+		  $form['submit_button']['#access'] = FALSE;
+		}
+	  }
+	}
+
+	
+	function EDT_form_validate($form, &$form_state) {
+		if ($form_state['values']['heure_debut_cours'] < 8 || $form_state['values']['heure_debut_cours'] > 20){
+			form_set_error('heure_debut_cours', t('L\'heure de début du cours doit être comprise entre 8h et 20h.'));
+		  }
+		if ($form_state['values']['heure_fin_cours'] < $form_state['values']['heure_debut_cours']){
+			form_set_error('heure_fin_cours', t('L\'heure de fin du cours doit être supérieure à l\'heure de début du cours concerné.'));
+		  }
+		if ($form_state['values']['heure_fin_cours'] < 8 || $form_state['values']['heure_fin_cours'] > 20){
+			form_set_error('heure_fin_cours', t('L\'heure de fin du cours doit être comprise entre 8h et 20h.'));
+		  }
+		if (strpos($form_state['values']['couleur'], '#') && strlen($form_state['values']['couleur']) == 7 ){
+			form_set_error('couleur', t('La couleur est invalide.'));
+		  }
+		
+		$heure_deb = $form_state['values']['heure_debut_cours'];
+		$heure_fin = $form_state['values']['heure_fin_cours'];
+		
+		$date_deb_cours =  $form_state['values']['date_cours'].' '.$heure_deb.':00:00';
+		$date_fin_cours = $form_state['values']['date_cours'].' '.$heure_fin.':00:00';
+		
+		$exists = db_query("SELECT COUNT(*) as existe FROM cours where date_debut = '".$date_deb_cours."' OR date_fin = '".$date_fin_cours."'");
+		$compt = $exists->fetchAssoc();
+		if ($compt['existe'] >= 1)
+		{
+			form_set_error('date_cours', t('Il y a déjà un cours à ces heures-là.'));
+		}
+	}
+
+	function EDT_form_submit($form, &$form_state) {
+		$nom_cours = $form_state['values']['designation_cours'];
+		$nom_enseignant = $form_state['values']['enseignant_cours'];
+		$heure_deb = $form_state['values']['heure_debut_cours'];
+		$heure_fin = $form_state['values']['heure_fin_cours'];
+			
+		
+		$date_deb_cours =  $form_state['values']['date_cours'].' '.$heure_deb.':00:00';
+		$date_fin_cours = $form_state['values']['date_cours'].' '.$heure_fin.':00:00';
+		
+		$exists = db_query("SELECT COUNT(*) as existe FROM couleur where label_cours = '".$nom_cours."'");
+		$compt = $exists->fetchAssoc();
+		if ($compt['existe'] < 1 && isset($form_state['values']['couleur']))
+		{
+			$nouv_coul = db_insert('couleur') 
+			->fields(array(
+			  'label_cours' => $nom_cours,
+			  'code' => $form_state['values']['couleur'],
+			))
+			->execute();
+		}
+		else if ($compt['existe'] == 1 && isset($form_state['values']['couleur']))
+		{
+			if ($form_state['values']['couleur'] != '')
+				$update_coul = db_query("UPDATE couleur SET code = '".$form_state['values']['couleur']."' WHERE label_cours = '".$nom_cours."'");
+		}
+		
+		
+		$nouv_cours = db_insert('cours') 
+			->fields(array(
+			  'designation' => $nom_cours,
+			  'enseignant' => $nom_enseignant,
+			  'date_debut' => $date_deb_cours,
+			  'date_fin' => $date_fin_cours,
+			))
+			->execute();
+	}

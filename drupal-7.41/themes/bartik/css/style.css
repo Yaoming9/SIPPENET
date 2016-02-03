@@ -182,8 +182,7 @@ table table {
   font-size: 1em;
 }
 table tr th {
-  background: #757575;
-  background: rgba(0, 0, 0, 0.51);
+  background: #446BC3;
   border-bottom-style: none;
 }
 table tr th,
@@ -453,7 +452,23 @@ h1#site-name {
   display: inline;
   padding: 0 0.5em;
 }
-
+input[type=text], textarea {
+  -webkit-transition: all 0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  -ms-transition: all 0.30s ease-in-out;
+  -o-transition: all 0.30s ease-in-out;
+  outline: none;
+  padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;
+  border: 1px solid #DDDDDD;
+}
+ 
+input[type=text]:focus, textarea:focus {
+  box-shadow: 0 0 5px #FD7528;
+  padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;
+  border: 1px solid #FD7528;
+}
 /* --------------- Main Menu ------------ */
 
 #main-menu {
@@ -1638,4 +1653,8 @@ div.admin-panel .description {
 }
 #footer-wrapper .poll .bar .foreground {
   background-color: #ddd;
+}
+
+#switch_prec{
+	padding-right: 5%;
 }

@@ -1,0 +1,70 @@
+<?php
+function EDT_schema() {
+  $schema = array();
+
+  $schema['cours'] = array(
+    'description' => t('Table de base pour les cours.'),
+    'fields' => array(
+      'id' => array(
+        'description' => 'Identifiant du cours.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE),
+      'designation' => array(
+        'description' => 'La designation du cours.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => 0),
+      'enseignant' => array(
+        'description' => 'Le nom du professeur gerant le cours.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => ''),
+      'date_debut' => array(
+        'description' => 'La date de debut du cours.',
+        'type' => 'datetime',
+		'mysql_type' => 'DATETIME',
+        'not null' => TRUE),
+	  'date_fin' => array(
+        'description' => 'La date de fin du cours.',
+        'type' => 'datetime',
+		'mysql_type' => 'DATETIME',
+        'not null' => TRUE),
+    ),
+	
+      'primary key' => array('id'),
+	  'unique keys' => array(
+         'date_debut' => array('date_debut'), 
+         'date_fin' => array('date_fin'),
+        ),
+  );
+  
+  
+  $schema['couleur'] = array(
+    'description' => t('Table de base pour les couleurs des cours.'),
+    'fields' => array(
+      'id_coul' => array(
+        'description' => 'Identifiant de la couleur.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE),
+      'code' => array(
+        'description' => 'Le code hexadécimal de la couleur.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => 0),
+	  'label_cours' => array(
+        'description' => 'Le cours associé à la couleur.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => 0)
+    ),
+      'primary key' => array('id_coul'),
+  );
+  
+  return $schema;
+}
